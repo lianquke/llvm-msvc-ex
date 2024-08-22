@@ -23,6 +23,7 @@ add_llvm_pass_plugin(Obfuscation
         Linearize.cpp
         EasyCFG.cpp
         AliasAccess.cpp
+        IndirectBranch.cpp
         Plugin.cpp
 
         ADDITIONAL_HEADER_DIRS
