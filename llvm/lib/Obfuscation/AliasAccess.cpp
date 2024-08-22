@@ -32,6 +32,7 @@
 #ifdef _MSC_VER
 #include <vcruntime_string.h>
 #endif
+#include <VMFlatten.h>
 #include <vector>
 
 #define BRANCH_NUM 17
@@ -72,12 +73,18 @@ Function* AliasAccess::buildGetterFunction(Module &M) {
       Type::getInt8Ty(M.getContext())->getPointerTo(), Params, false);
   Function *F = Function::Create(FT, GlobalValue::PrivateLinkage,
                                  Twine("__obfu_alias_access_getter"), M);
-  F->setAnnotationStrings("x-vm,x-full");
+  if (get_vm_fla_level()==7)
+    F->setAnnotationStrings("x-vm,x-full");
+
   BasicBlock *Entry = BasicBlock::Create(M.getContext(), "entry", F);
   Function::arg_iterator Iter = F->arg_begin();
   Value *Ptr = Iter;
   IRBuilder<> IRB(Entry);
   IRB.CreateRet(Ptr);
+  if(get_vm_fla_level()!=7) {
+    ollvm::bogus(*F);
+    ollvm::doF(*F->getParent(),*F);
+  }
   return F;
 }
 
