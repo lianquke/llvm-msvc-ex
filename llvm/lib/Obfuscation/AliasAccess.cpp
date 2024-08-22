@@ -72,6 +72,7 @@ Function* AliasAccess::buildGetterFunction(Module &M) {
       Type::getInt8Ty(M.getContext())->getPointerTo(), Params, false);
   Function *F = Function::Create(FT, GlobalValue::PrivateLinkage,
                                  Twine("__obfu_alias_access_getter"), M);
+  F->setAnnotationStrings("x-vm,x-full");
   BasicBlock *Entry = BasicBlock::Create(M.getContext(), "entry", F);
   Function::arg_iterator Iter = F->arg_begin();
   Value *Ptr = Iter;
