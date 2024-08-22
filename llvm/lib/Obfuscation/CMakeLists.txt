@@ -24,6 +24,7 @@ add_llvm_pass_plugin(Obfuscation
         EasyCFG.cpp
         AliasAccess.cpp
         IndirectBranch.cpp
+        GlobalsEncryption.cpp
         Plugin.cpp
 
         ADDITIONAL_HEADER_DIRS
