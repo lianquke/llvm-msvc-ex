@@ -34,7 +34,7 @@
 #endif
 #include <vector>
 
-#define BRANCH_NUM 6
+#define BRANCH_NUM 17
 
 using namespace llvm;
 
