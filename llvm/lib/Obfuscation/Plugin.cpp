@@ -39,7 +39,7 @@ llvm::PassPluginLibraryInfo getObfuscationPluginInfo() {
           MPM.addPass(createModuleToFunctionPassAdaptor(MBAObfuscationPass()));
           MPM.addPass(createModuleToFunctionPassAdaptor(FlatteningPass()));
           MPM.addPass(createModuleToFunctionPassAdaptor(VmProtectPass()));
-          MPM.addPass(AliasAccess());
+
           
         });
         PB.registerOptimizerEarlyEPCallback([](llvm::ModulePassManager &MPM,
@@ -50,6 +50,7 @@ llvm::PassPluginLibraryInfo getObfuscationPluginInfo() {
           MPM.addPass(CombineFunctionsPass());
           MPM.addPass(createModuleToFunctionPassAdaptor(FlatteningEnhanced()));
           MPM.addPass(VariableRotationPass());
+
         });
 
         PB.registerOptimizerLastEPCallback([](llvm::ModulePassManager &MPM,
@@ -63,6 +64,7 @@ llvm::PassPluginLibraryInfo getObfuscationPluginInfo() {
           MPM.addPass(Linearize());
           MPM.addPass(EasyCfgPass());
           MPM.addPass(createModuleToFunctionPassAdaptor(IndirectBranch()));
+          MPM.addPass(AliasAccess());
           MPM.addPass(GlobalsEncryption());
 
         });
