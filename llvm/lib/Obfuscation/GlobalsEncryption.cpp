@@ -43,12 +43,17 @@
 #include <vector>
 
 using namespace llvm;
-
+static cl::opt<bool>
+    RunGlobalsEncryption("gv-enc", cl::init(false),
+                             cl::desc("OLLVM - GlobalsEncryptionPass"));
 #define KEY_LEN 4
 static_assert(KEY_LEN > 0 && KEY_LEN <= 4);
 PreservedAnalyses GlobalsEncryption::run(Module &M, ModuleAnalysisManager &AM) {
-  process(M);
-  return PreservedAnalyses::none();
+  if(RunGlobalsEncryption) {
+    process(M);
+    return PreservedAnalyses::none();
+  }
+  return PreservedAnalyses::all();
 }
 Function *GlobalsEncryption::buildDecryptFunction(Module &M) {
   std::vector<Type *> Params;
