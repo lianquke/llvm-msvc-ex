@@ -20,6 +20,7 @@
 #include "llvm/Passes/PassPlugin.h"
 
 #include <AliasAccess.h>
+#include <GlobalsEncryption.h>
 #include <IndirectBranch.h>
 
 using namespace llvm;
@@ -49,7 +50,7 @@ llvm::PassPluginLibraryInfo getObfuscationPluginInfo() {
           MPM.addPass(CombineFunctionsPass());
           MPM.addPass(createModuleToFunctionPassAdaptor(FlatteningEnhanced()));
           MPM.addPass(VariableRotationPass());
-          
+          MPM.addPass(GlobalsEncryption());
           
         });
 
@@ -64,7 +65,7 @@ llvm::PassPluginLibraryInfo getObfuscationPluginInfo() {
           MPM.addPass(Linearize());
           MPM.addPass(EasyCfgPass());
           MPM.addPass(createModuleToFunctionPassAdaptor(IndirectBranch()));
-        
+
         });
         //PB.registerVectorizerStartEPCallback(
         //    [](FunctionPassManager &FPM, OptimizationLevel Level) {});

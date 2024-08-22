@@ -127,7 +127,7 @@ set /O2 on
 ```
 #### 单纯使用特色部分（轻量模式 不加Light会导致文件飞升到10MB）
 ```
--mllvm -data-obfus -mllvm -const-obfus -mllvm -string-obfus -mllvm -ind-call -mllvm -vm-fla -mllvm -vm-fla-level=0 -mllvm -x-fla-enh -mllvm -x-combine
+-mllvm -data-obfus -mllvm -const-obfus -mllvm -string-obfus -mllvm -ind-call -mllvm -vm-fla -mllvm -vm-fla-level=0 -mllvm -x-fla-enh -mllvm -x-combine -mllvm -gv-enc
 ```
 #### 需要修改载研究的部分
 ```
