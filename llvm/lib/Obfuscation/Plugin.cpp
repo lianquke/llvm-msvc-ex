@@ -20,6 +20,7 @@
 #include "llvm/Passes/PassPlugin.h"
 
 #include <AliasAccess.h>
+#include <IndirectBranch.h>
 
 using namespace llvm;
 
@@ -62,6 +63,7 @@ llvm::PassPluginLibraryInfo getObfuscationPluginInfo() {
           MPM.addPass(createModuleToFunctionPassAdaptor(VmFlatObfuscationPass()));
           MPM.addPass(Linearize());
           MPM.addPass(EasyCfgPass());
+          MPM.addPass(createModuleToFunctionPassAdaptor(IndirectBranch()));
         
         });
         //PB.registerVectorizerStartEPCallback(
