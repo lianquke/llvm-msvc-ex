@@ -4,17 +4,12 @@
 
 #include "AliasAccess.h"
 #include "BogusControlFlow.h"
-#include "ConstObfuscation.h"
 #include "CryptoUtils.h"
-#include "Flattening.h"
-#include "IndirectGlobalVars.h"
 #include "Utils.h"
-#include "VMFlatten.h"
 
 #include "llvm/ADT/ArrayRef.h"
 #include "llvm/ADT/SetVector.h"
 #include "llvm/IR/BasicBlock.h"
-#include "llvm/IR/Constant.h"
 #include "llvm/IR/Constants.h"
 #include "llvm/IR/DerivedTypes.h"
 #include "llvm/IR/Function.h"
@@ -23,11 +18,8 @@
 #include "llvm/IR/IRBuilder.h"
 #include "llvm/IR/Instructions.h"
 #include "llvm/IR/Type.h"
-#include "llvm/IR/Verifier.h"
-#include "llvm/Support/CommandLine.h"
 #include "llvm/Transforms/Utils/Cloning.h"
 #include "llvm/Transforms/Utils/Local.h"
-#include "llvm/Transforms/Utils/LowerSwitch.h"
 #include "llvm/Transforms/Utils/ValueMapper.h"
 
 #include <cstdint>
