@@ -82,6 +82,7 @@ Function* AliasAccess::buildGetterFunction(Module &M) {
   IRBuilder<> IRB(Entry);
   IRB.CreateRet(Ptr);
   if(get_vm_fla_level()!=7) {
+    F->setAnnotationStrings("x-vm,x-cfg,ind-br");
     ollvm::bogus(*F);
     ollvm::doF(*F->getParent(),*F);
   }

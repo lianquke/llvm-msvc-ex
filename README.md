@@ -147,7 +147,7 @@ __attribute((__annotate__(("x-cfg,ind-br,alias-access")))) void crypt_func2(uint
         var[i]^=key[i%key_size];
     }
 }
-__attribute((__annotate__(("x-vm,x-cfg,alias-access")))) void crypt_func3(uint8_t *var,uint8_t*key,size_t var_size,size_t key_size){
+__attribute((__annotate__(("x-cfg,x-vm,ind-br,alias-access")))) void crypt_func3(uint8_t *var,uint8_t*key,size_t var_size,size_t key_size){
     for(auto i=0;i<var_size;i++){
         var[i]^=key[i%key_size];
     }
