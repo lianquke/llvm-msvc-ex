@@ -35,6 +35,7 @@ https://github.com/gmh5225/awesome-llvm-security#ollvm
 - [x] 自定義分割合併 combine_func[tag_number] 模式
 - ~~[ ] x-var-rot 待处理~~
 - [x] 新功能
+- [ ] new functions
 
 
 [![windows-llvm-msvc-build](https://github.com/backengineering/llvm-msvc/actions/workflows/windows-llvm-msvc-build.yml/badge.svg?branch=dev)](https://github.com/backengineering/llvm-msvc/actions/workflows/windows-llvm-msvc-build.yml)
