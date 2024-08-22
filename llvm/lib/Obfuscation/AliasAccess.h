@@ -8,10 +8,14 @@
 #include "llvm/IR/PassManager.h"
 
 namespace llvm {
-class AliasAccess : PassInfoMixin<AliasAccess> {
+class AliasAccess : public PassInfoMixin<AliasAccess> {
+public:
+  AliasAccess()=default;
   PreservedAnalyses run(Module &M, ModuleAnalysisManager &AM);
+private:
   Function *buildGetterFunction(Module &M);
   void process(Function &F, Function *Getter);
+public:
   static bool isRequired() { return true; }
 };
 }

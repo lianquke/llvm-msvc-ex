@@ -1,23 +1,25 @@
 #include "BogusControlFlow.h"
+#include "CombineFunctions.h"
 #include "ConstObfuscation.h"
 #include "DataObfuscation.h"
+#include "EasyCFG.hpp"
 #include "Flattening.h"
+#include "FlatteningEnhanced.h"
 #include "IndirectCall.h"
 #include "IndirectGlobalVars.h"
+#include "Linearize.h"
 #include "MBAObfuscation.h"
 #include "SplitBasicBlock.h"
 #include "StringObfuscation.h"
 #include "Substitution.h"
 #include "VMFlatten.h"
+#include "VariableRotation.h"
 #include "xVMP.h"
 #include "xVMProtect.h"
-#include "CombineFunctions.h"
-#include "FlatteningEnhanced.h"
-#include "VariableRotation.h"
-#include "Linearize.h"
-#include "EasyCFG.hpp"
 #include "llvm/Passes/PassBuilder.h"
 #include "llvm/Passes/PassPlugin.h"
+
+#include <AliasAccess.h>
 
 using namespace llvm;
 
@@ -35,6 +37,7 @@ llvm::PassPluginLibraryInfo getObfuscationPluginInfo() {
           MPM.addPass(createModuleToFunctionPassAdaptor(MBAObfuscationPass()));
           MPM.addPass(createModuleToFunctionPassAdaptor(FlatteningPass()));
           MPM.addPass(createModuleToFunctionPassAdaptor(VmProtectPass()));
+          MPM.addPass(AliasAccess());
           
         });
         PB.registerOptimizerEarlyEPCallback([](llvm::ModulePassManager &MPM,
