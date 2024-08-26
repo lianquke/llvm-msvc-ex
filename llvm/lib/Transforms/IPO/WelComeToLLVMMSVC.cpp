@@ -25,11 +25,11 @@ PreservedAnalyses WelcomeToLLVMMSVCPass::run(Module &M,
                                              ModuleAnalysisManager &AM) {
 
   bool Changed = false;
-
+#if 0
   if (Enable) {
     if (!M.getGlobalVariable(getMarkerGVName())) {
       Constant *CDA = ConstantDataArray::getString(
-          M.getContext(), "Welcome to use llvm-msvc.", false);
+          M.getContext(), "Roit", false);
       GlobalVariable *GV = new GlobalVariable(M, CDA->getType(), true,
                                               GlobalValue::LinkOnceODRLinkage,
                                               CDA, getMarkerGVName());
@@ -40,6 +40,7 @@ PreservedAnalyses WelcomeToLLVMMSVCPass::run(Module &M,
       Changed = true;
     }
   }
+#endif
 
   /**
    * This statement returns a PreservedAnalyses object based on whether there
