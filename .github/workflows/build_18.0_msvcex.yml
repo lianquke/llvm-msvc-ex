@@ -1,0 +1,59 @@
+name: Build LLVM18 MSVC-EX
+
+on:
+  workflow_dispatch:
+  push:
+    branches: [dev]
+
+jobs:
+  build:
+    runs-on: windows-latest
+    env:
+      GITHUB_ACCESS_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4.1.6
+        with:
+          ref: "dev"
+          submodules: "recursive"
+
+      - name: Add MSBuild to PATH
+        uses: microsoft/setup-msbuild@v2
+        with:
+         msbuild-architecture: x64
+         
+      - name: setup vsdevenv
+        uses: seanmiddleditch/gha-setup-vsdevenv@master
+        
+      - name: Setup python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Install dependencies
+        shell: cmd
+        run: |
+          choco install cmake --installargs 'ADD_CMAKE_TO_PATH=System' -y
+          choco install ninja -y
+
+      - name: Build
+        shell: cmd
+        run: |
+          cmake -S llvm -B build -G Ninja -DLLVM_ENABLE_PROJECTS="clang" -DLLVM_OBFUSCATION_LINK_INTO_TOOLS=ON -DCMAKE_BUILD_TYPE=release -DLLVM_USE_CRT_RELEASE=MT -DLLVM_ENABLE_LIBXML2=OFF -DLLVM_ENABLE_ZLIB=OFF -DCMAKE_CXX_FLAGS="/utf-8" -DCMAKE_C_FLAGS="/utf-8" -DLLDB_ENABLE_PYTHON=OFF -DLLVM_INCLUDE_TESTS=OFF -DLLVM_INCLUDE_EXAMPLES=OFF
+          cmake --build build -j16
+
+      - name: Upload Artifact
+        if: failure() || success() 
+        uses: actions/upload-artifact@v4.3.3
+        with:
+          name: OLLVM18 MSVC-EX Bin
+          compression-level: 8
+          path: ./build/bin/
+      
+      - name: Upload Artifact2
+        if: failure() || success() 
+        uses: actions/upload-artifact@v4.3.3
+        with:
+          name: OLLVM18 MSVC-EX clang
+          compression-level: 8
+          path: ./build/bin/clang.exe
