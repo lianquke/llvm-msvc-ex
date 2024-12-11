@@ -40,7 +40,7 @@ llvm::PassPluginLibraryInfo getObfuscationPluginInfo() {
           MPM.addPass(createModuleToFunctionPassAdaptor(MBAObfuscationPass()));
           MPM.addPass(createModuleToFunctionPassAdaptor(FlatteningPass()));
           MPM.addPass(createModuleToFunctionPassAdaptor(VmProtectPass()));
-         
+          
 
         });
         PB.registerOptimizerEarlyEPCallback([](llvm::ModulePassManager &MPM,
