@@ -1,6 +1,6 @@
 //
 // Ref to https://github.com/za233/Polaris-Obfuscator/
-// Copyed by root on 12/11/2024.
+// Copied by root on 12/11/2024.
 //
 
 #include "AliasAccess.h"
