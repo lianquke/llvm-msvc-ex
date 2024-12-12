@@ -24,7 +24,7 @@
 #include "llvm/Transforms/Utils/Local.h"
 #include "llvm/Transforms/Utils/LowerSwitch.h"
 #include "llvm/Transforms/Utils/ValueMapper.h"
-
+#include "llvm/IR/InlineAsm.h"
 #include <cstdint>
 #include <cstring>
 #include <iomanip>
@@ -206,6 +206,17 @@ Function *xvmm::virtualization(Function &f) {
   
   buildVMFunction(f, *vm_func, ops, new_mem_size, oparr_var, 256, remap,
                   alloca_map);
+#if 1
+
+  auto *AsmStr = InlineAsm::get(FunctionType::get(Type::getVoidTy(vm_func->getContext()), false),
+                                      "backend-obfu", /* Constraints */ "", /* hasSideEffects */ true);
+
+  // Add a call to the inline assembly at the beginning of the function
+  BasicBlock &EntryBB = vm_func->getEntryBlock();
+  Instruction *FirstInst = &*EntryBB.getFirstNonPHI();
+  IRBuilder<> Builder(FirstInst);
+  Builder.CreateCall(AsmStr);
+#endif
   turnOffOptimization(vm_func);
   return vm_func;
 }
