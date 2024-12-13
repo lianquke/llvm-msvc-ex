@@ -200,7 +200,7 @@ Function *xvmm::virtualization(Function &f) {
     auto ann = readAnnotate(&f);
     ann.erase(ann.find("x-vm"),4);
     if (ann.find("x-vm-obf") !=  std::string::npos) {
-      ann.erase(ann.find("x-vm-obf"),4);
+      ann.erase(ann.find("x-vm-obf"),8);
        need_obf = true;
     }
     if (ann.find("x-full") != std::string::npos) {
