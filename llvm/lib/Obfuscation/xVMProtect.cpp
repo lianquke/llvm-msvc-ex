@@ -199,8 +199,8 @@ Function *xvmm::virtualization(Function &f) {
                        f.getName() + Twine("_VM"), f.getParent());
     auto ann = readAnnotate(&f);
     ann.erase(ann.find("x-vm"),4);
-    if (ann.find("x-vm-obf") !=  std::string::npos) {
-      ann.erase(ann.find("x-vm-obf"),8);
+    if (ann.find("x-vobf") !=  std::string::npos) {
+       ann.erase(ann.find("x-vobf"),6);
        need_obf = true;
     }
     if (ann.find("x-full") != std::string::npos) {
