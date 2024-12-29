@@ -928,7 +928,7 @@ void X86AsmPrinter::emitStartOfAsmFile(Module &M) {
         COFF::IMAGE_SCN_CNT_INITIALIZED_DATA | COFF::IMAGE_SCN_MEM_READ,
         SectionKind::getReadOnly());
     OutStreamer->switchSection(Nt);
-    OutStreamer->emitBytes(StringRef("Riot", 88));
+    OutStreamer->emitBytes(StringRef("New World coming soon", 22));
     OutStreamer->endSection(Nt);
     OutStreamer->switchSection(Cur);
 #endif

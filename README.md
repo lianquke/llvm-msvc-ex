@@ -35,6 +35,7 @@ https://github.com/gmh5225/awesome-llvm-security#ollvm
 - [x] 自定義分割合併 combine_func[tag_number] 模式
 - ~~[ ] x-var-rot 待处理~~
 - [x] 新功能
+- [x] custom-cc 参数传递和返回值的方法
 - [ ] new functions
 
 
@@ -105,14 +106,15 @@ X86：clang+lld+RelWithDebInfo
 
 mkdir build-RelWithDebInfo-64
 pushd build-RelWithDebInfo-64
-cmake .. -G "Visual Studio 17 2022" -A X64 -DCMAKE_CXX_FLAGS="/utf-8" -DCMAKE_C_FLAGS="/utf-8" -DLLDB_ENABLE_PYTHON=OFF -DLLVM_INCLUDE_TESTS=OFF -DLLVM_INCLUDE_EXAMPLES=OFF -DLLVM_ENABLE_PROJECTS="clang;lld;lldb" -DCMAKE_INSTALL_PREFIX=E:\llvm\install-RelWithDebInfo-64 -DLLVM_ENABLE_LIBXML2=OFF -DLLVM_ENABLE_ZLIB=OFF -DLLVM_TARGETS_TO_BUILD=X86 -DLLVM_OBFUSCATION_LINK_INTO_TOOLS=ON -DCMAKE_BUILD_TYPE=RelWithDebInfo -DLLVM_USE_CRT_RELEASE=MT ../llvm
+cmake .. -G "Visual Studio 17 2022" -A X64 -DCMAKE_CXX_FLAGS="/utf-8" -DCMAKE_C_FLAGS="/utf-8" -DLLVM_ENABLE_RPMALLOC=ON -DLLDB_ENABLE_PYTHON=OFF -DLLVM_INCLUDE_TESTS=OFF -DLLVM_INCLUDE_EXAMPLES=OFF -DLLVM_ENABLE_PROJECTS="clang;lld;lldb" -DCMAKE_INSTALL_PREFIX=E:\llvm\install-RelWithDebInfo-64 -DLLVM_ENABLE_LIBXML2=OFF -DLLVM_ENABLE_ZLIB=OFF -DLLVM_TARGETS_TO_BUILD=X86 -DLLVM_OBFUSCATION_LINK_INTO_TOOLS=ON -DCMAKE_BUILD_TYPE=RelWithDebInfo -DLLVM_USE_CRT_RELEASE=MT ../llvm
 msbuild /m -p:Configuration=RelWithDebInfo INSTALL.vcxproj 
 
 X86：clang+lld+release
 
 mkdir build-release-64
 pushd build-release-64
-cmake .. -G "Visual Studio 17 2022" -A X64 -DCMAKE_CXX_FLAGS="/utf-8" -DCMAKE_C_FLAGS="/utf-8" -DLLDB_ENABLE_PYTHON=OFF -DLLVM_INCLUDE_TESTS=OFF -DLLVM_INCLUDE_EXAMPLES=OFF -DLLVM_ENABLE_PROJECTS="clang;lld;lldb" -DCMAKE_INSTALL_PREFIX=E:\llvm\install-release-64 -DLLVM_ENABLE_LIBXML2=OFF -DLLVM_ENABLE_ZLIB=OFF -DLLVM_TARGETS_TO_BUILD=X86 -DLLVM_OBFUSCATION_LINK_INTO_TOOLS=ON -DCMAKE_BUILD_TYPE=release -DLLVM_USE_CRT_RELEASE=MT ../llvm
+cmake .. -G "Visual Studio 17 2022" -A X64 -DCMAKE_CXX_FLAGS="/utf-8" -DCMAKE_C_FLAGS="/utf-8" -DLLVM_ENABLE_RPMALLOC=ON -DLLDB_ENABLE_PYTHON=OFF -DLLVM_INCLUDE_TESTS=OFF -DLLVM_INCLUDE_EXAMPLES=OFF -DLLVM_ENABLE_PROJECTS="clang;lld;lldb" -DCMAKE_INSTALL_PREFIX=E:\llvm\install-release-64 -DLLVM_ENABLE_LIBXML2=OFF -DLLVM_ENABLE_ZLIB=OFF -DLLVM_TARGETS_TO_BUILD=X86 -DLLVM_OBFUSCATION_LINK_INTO_TOOLS=ON -DCMAKE_BUILD_TYPE=release -DLLVM_USE_CRT_RELEASE=MT ../llvm
+
 msbuild /m -p:Configuration=release INSTALL.vcxproj 
 ```
 
@@ -137,17 +139,20 @@ set /O2 on
 
 #### vm sample and x-full sample
 ```c++
-__attribute((__annotate__(("x-vm,x-full,x-cfg")))) void crypt_func1(uint8_t *var,uint8_t*key,size_t var_size,size_t key_size){
+[[clang::annotate("x-vm,x-full,x-cfg,custom-cc")]]
+void crypt_func1(uint8_t *var,uint8_t*key,size_t var_size,size_t key_size){
     for(auto i=0;i<var_size;i++){
         var[i]^=key[i%key_size];
     }
 }
-__attribute((__annotate__(("x-cfg,ind-br,alias-access")))) void crypt_func2(uint8_t *var,uint8_t*key,size_t var_size,size_t key_size){
+[[clang::annotate("x-cfg,ind-br,alias-access,custom-cc")]]
+void crypt_func2(uint8_t *var,uint8_t*key,size_t var_size,size_t key_size){
     for(auto i=0;i<var_size;i++){
         var[i]^=key[i%key_size];
     }
 }
-__attribute((__annotate__(("x-cfg,x-vm,ind-br,alias-access")))) void crypt_func3(uint8_t *var,uint8_t*key,size_t var_size,size_t key_size){
+[[clang::annotate("x-cfg,x-vm,ind-br,alias-access,custom-cc")]]
+void crypt_func3(uint8_t *var,uint8_t*key,size_t var_size,size_t key_size){
     for(auto i=0;i<var_size;i++){
         var[i]^=key[i%key_size];
     }
@@ -158,15 +163,16 @@ __attribute((__annotate__(("x-cfg,x-vm,ind-br,alias-access")))) void crypt_func3
 
 #### combine sample
 ```c++
-__attribute((__annotate__(("combine_func[tag1]")))) int a1(int a, int b)
+[[clang::annotate("combine_func[tag1]")]]
+int a1(int a, int b)
 {
     printf("%d , %d\r\n", a, b);
     printf("%x\r\n", a ^ b);
     return a + b;
 }
 
-
-__attribute((__annotate__(("combine_func[tag1]")))) int a2(int a, int b)
+[[clang::annotate("combine_func[tag1]")]]
+int a2(int a, int b)
 {
     std::cout << "hello1" << std::endl;
     for (auto i = std::min(a, b);i < std::max(a, b);i++)
@@ -178,8 +184,8 @@ __attribute((__annotate__(("combine_func[tag1]")))) int a2(int a, int b)
     return a * b+ a1(a, b);
 }
 
-
-__attribute((__annotate__(("combine_func[tag2]")))) int a3(int a,int b)
+[[clang::annotate("combine_func[tag2]")]]
+int a3(int a,int b)
 {
     printf("%d , %d\r\n", a+1, b+2);
     printf("%x\r\n", a ^ b);
