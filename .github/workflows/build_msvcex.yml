@@ -1,9 +1,9 @@
-name: Build LLVM18 MSVC-EX
+name: Build LLVM-MSVC-EX
 
 on:
   workflow_dispatch:
-  push:
-    branches: [dev]
+  # push:
+  #   branches: [dev]
 
 jobs:
   build:
